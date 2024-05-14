@@ -1,0 +1,11 @@
+Neural network Math
+
+BACK PROPAGATION
+
+chain rule
+∂C    ∂C      ∂ŷ      ∂z
+/   =  /   X   /   X   /
+∂Wi   ∂ŷ      ∂z      ∂Wi
+
+∂C/∂ŷ = 
+∂ŷ
