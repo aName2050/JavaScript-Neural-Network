@@ -15,10 +15,6 @@ export class Neuron {
 
 		this.bias = Random(-1, 1);
 		this.weights = Array.from({ length: totalInputs }, () => Random(-1, 1));
-
-		console.log(
-			`[INITIALIZATION] [NEURON] bias: ${this.bias} weight: ${this.weights}`
-		);
 	}
 
 	public getNeuronOutput(neuronInputs: number[]): number {

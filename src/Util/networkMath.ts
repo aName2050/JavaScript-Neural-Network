@@ -7,10 +7,17 @@ class NNMath {
 		return Math.pow(actual - predicted, 2);
 	}
 
-	// TODO:
-	// public Cost(actualValues: number[], predictedValues: number[]): number {
+	public Cost(actualValues: number[], predictedValues: number[]): number {
+		let MSEOutputs: number[] = [];
+		for (let i = 0; i < actualValues.length; i++) {
+			MSEOutputs.push(this.MSE(actualValues[i], predictedValues[i]));
+		}
 
-	// }
+		const loss: number = MSEOutputs.reduce((pV, cV) => pV + cV);
+		const C: number = (1 / predictedValues.length) * loss;
+
+		return C;
+	}
 }
 
 export const NetworkMath = new NNMath();
