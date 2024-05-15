@@ -1,6 +1,6 @@
 class NNMath {
-	public DotProduct(inputs: number[], weights: number[]): number {
-		return inputs.map((v, i) => v * i).reduce((pV, cV) => pV + cV);
+	public DotProduct(x: number[], y: number[]): number {
+		return x.map((v, i) => v * y[i]).reduce((pV, cV) => pV + cV);
 	}
 
 	public MSE(actual: number, predicted: number): number {
@@ -17,6 +17,10 @@ class NNMath {
 		const C: number = (1 / predictedValues.length) * loss;
 
 		return C;
+	}
+
+	public Sum(x: number[], y: number[]): number {
+		return x.map((v, i) => v - y[i]).reduce((pV, cV) => pV + cV);
 	}
 }
 

@@ -7,5 +7,27 @@ chain rule
 /   =  /   X   /   X   /
 ∂Wi   ∂ŷ      ∂z      ∂Wi
 
-∂C/∂ŷ = 
-∂ŷ
+∂C/∂ŷ  = ?
+∂ŷ/∂z  = ?
+∂z/∂Wi = ?
+
+Gradient of C with respect to ŷ (∂C/∂ŷ)
+2/n * sum(y - ŷ)
+
+Gradient of ŷ with respect to the z (∂ŷ/∂z)
+sigmoid(z) * (1 - sigmoid(z))
+
+Gradient of z with respect to weight Wi (∂z/∂Wi)
+Xi (the given input that corresponds with the given weight)
+
+Gradient of the Cost (C) with respect to the weight Wi
+(2/n * sum(y - ŷ)) * (sigmoid(z) * (1 - sigmoid(z))) * (Xi)
+
+Gradient of the Cost (C) with respect the bias b
+(2/n * sum(y - ŷ)) * (sigmoid(z) * (1 - sigmoid(z)))
+
+Updated weights and biases
+Weights
+Wi = Wi - (learnRate * ∂C/∂Wi)
+Bias
+b = b - (learnRate * ∂C/∂b)
