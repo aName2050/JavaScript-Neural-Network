@@ -32,6 +32,9 @@ export class NeuralNetwork {
 		);
 	}
 
+	// TODO:
+	// FIXME: figure out why the outputs are always the same, when the shouldn't be
+
 	/**
 	 *
 	 * @param networkInputs The inputs of the network
@@ -45,9 +48,9 @@ export class NeuralNetwork {
 		for (let i = 1; i < this.Layers.length; i++) {
 			let layerOutAsArray: number[] = [];
 			for (let j = 0; j < this.Layers[i].Neurons.length; j++) {
-				layerOutAsArray.push(
-					this.Layers[i].getLayerOutput(layerOutput)
-				);
+				const layerOut = this.Layers[i].getLayerOutput(layerOutput);
+				// console.log(layerOut);
+				layerOutAsArray.push(layerOut);
 			}
 
 			layerOutput = layerOutAsArray;
@@ -69,9 +72,9 @@ export class NeuralNetwork {
 		 */
 		const networkOutputs: number[] = this.forwardPropagation(networkInputs);
 		const cost = NetworkMath.Cost(networkOutputs, dataset);
+		console.log('cost:', cost);
 
 		// Backpropagation algorithm (using gradient descent)
-		const GradientDescent = gradient;
 		// back propagation: forward propagation but backwards
 		let layerOut: number[] = networkInputs;
 		for (let layer = 1; layer < this.Layers.length; layer++) {
@@ -89,31 +92,55 @@ export class NeuralNetwork {
 					);
 				currLayerOut.push(Z);
 
+				// update each weight
 				for (
 					let weight = 0;
 					weight < this.Layers[layer].Neurons[neuron].weights.length;
 					weight++
 				) {
+					const oldWeight =
+						this.Layers[layer].Neurons[neuron].weights[weight];
 					this.Layers[layer].Neurons[neuron].weights[weight] =
 						NetworkMath.UpdateWeight(
-							this.Layers[layer].Neurons[neuron].weights[weight],
+							oldWeight,
 							learnRate,
 							networkOutputs,
 							dataset,
-							Z
-							// TODO: fix
-							// layerOut
+							Z,
+							layerOut[weight]
 						);
+
+					console.log(
+						`TRAINING... layer:${layer + 1}/${
+							this.Layers.length
+						} neuron:${neuron + 1}/${
+							this.Layers[layer].Neurons.length
+						} weight:${weight + 1}/${
+							this.Layers[layer].Neurons[neuron].weights.length
+						} oldWeight: ${oldWeight} newWeight: ${
+							this.Layers[layer].Neurons[neuron].weights[weight]
+						}`
+					);
 				}
 
+				const oldBias = this.Layers[layer].Neurons[neuron].bias;
 				this.Layers[layer].Neurons[neuron].bias =
 					NetworkMath.UpdateBias(
-						this.Layers[layer].Neurons[neuron].bias,
+						oldBias,
 						learnRate,
 						networkOutputs,
 						dataset,
 						Z
 					);
+				console.log(
+					`TRAINING... layer:${layer + 1}/${
+						this.Layers.length
+					} neuron:${neuron + 1}/${
+						this.Layers[layer].Neurons.length
+					} oldBias: ${oldBias} newBias: ${
+						this.Layers[layer].Neurons[neuron].bias
+					}`
+				);
 			}
 
 			layerOut = currLayerOut;

@@ -33,10 +33,11 @@ class NNMath {
 		z: number,
 		x: number
 	): number {
+		//prettier-ignore
 		return (
 			weight -
-			learnRate *
-				gradient.CostGradientWithRespectToWi(network, dataset, z, x)
+			(learnRate *
+				gradient.CostGradientWithRespectToWi(network, dataset, z, x))
 		);
 	}
 
@@ -47,10 +48,11 @@ class NNMath {
 		dataset: number[],
 		z: number
 	): number {
+		//prettier-ignore
 		return (
 			bias -
-			learnRate *
-				gradient.CostGradientWithRespectToBias(network, dataset, z)
+			(learnRate *
+				gradient.CostGradientWithRespectToBias(network, dataset, z))
 		);
 	}
 }
