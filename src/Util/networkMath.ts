@@ -1,3 +1,5 @@
+import { gradient } from './gradients';
+
 class NNMath {
 	public DotProduct(x: number[], y: number[]): number {
 		return x.map((v, i) => v * y[i]).reduce((pV, cV) => pV + cV);
@@ -21,6 +23,35 @@ class NNMath {
 
 	public Sum(x: number[], y: number[]): number {
 		return x.map((v, i) => v - y[i]).reduce((pV, cV) => pV + cV);
+	}
+
+	public UpdateWeight(
+		weight: number,
+		learnRate: number,
+		network: number[],
+		dataset: number[],
+		z: number,
+		x: number
+	): number {
+		return (
+			weight -
+			learnRate *
+				gradient.CostGradientWithRespectToWi(network, dataset, z, x)
+		);
+	}
+
+	public UpdateBias(
+		bias: number,
+		learnRate: number,
+		network: number[],
+		dataset: number[],
+		z: number
+	): number {
+		return (
+			bias -
+			learnRate *
+				gradient.CostGradientWithRespectToBias(network, dataset, z)
+		);
 	}
 }
 

@@ -1,3 +1,5 @@
+import { gradient } from '../Util/gradients';
+import { NetworkMath } from '../Util/networkMath';
 import { Layer } from './Layer';
 
 export class NeuralNetwork {
@@ -57,9 +59,64 @@ export class NeuralNetwork {
 
 	public train(
 		networkInputs: number[],
-		datasetInputs: number[],
+		dataset: number[],
 		learnRate: number
 	): void {
-		// TODO:
+		/**
+		 * !! CALCULUS !!
+		 *
+		 * lots of calculus...
+		 */
+		const networkOutputs: number[] = this.forwardPropagation(networkInputs);
+		const cost = NetworkMath.Cost(networkOutputs, dataset);
+
+		// Backpropagation algorithm (using gradient descent)
+		const GradientDescent = gradient;
+		// back propagation: forward propagation but backwards
+		let layerOut: number[] = networkInputs;
+		for (let layer = 1; layer < this.Layers.length; layer++) {
+			// loop over each neuron in layer
+			let currLayerOut: number[] = [];
+
+			for (
+				let neuron = 0;
+				neuron < this.Layers[layer].Neurons.length;
+				neuron++
+			) {
+				const Z: number =
+					this.Layers[layer].Neurons[neuron].getNeuronOutput(
+						layerOut
+					);
+				currLayerOut.push(Z);
+
+				for (
+					let weight = 0;
+					weight < this.Layers[layer].Neurons[neuron].weights.length;
+					weight++
+				) {
+					this.Layers[layer].Neurons[neuron].weights[weight] =
+						NetworkMath.UpdateWeight(
+							this.Layers[layer].Neurons[neuron].weights[weight],
+							learnRate,
+							networkOutputs,
+							dataset,
+							Z
+							// TODO: fix
+							// layerOut
+						);
+				}
+
+				this.Layers[layer].Neurons[neuron].bias =
+					NetworkMath.UpdateBias(
+						this.Layers[layer].Neurons[neuron].bias,
+						learnRate,
+						networkOutputs,
+						dataset,
+						Z
+					);
+			}
+
+			layerOut = currLayerOut;
+		}
 	}
 }
