@@ -45,17 +45,25 @@ export class NeuralNetwork {
 		);
 	}
 
-	// TODO:
-	// FIXME: figure out why the outputs are always the same, when the shouldn't be
-
 	/**
 	 *
 	 * @param networkInputs The inputs of the network
 	 * @returns The output layer
 	 */
 	public forwardPropagation(networkInputs: number[]): number[] {
-		// TODO: implement new forward propagation algorithm
-		return [0];
+		let networkOutput: number[] = networkInputs;
+
+		for (let i = 1; i < this.Layers.length; i++) {
+			networkOutput = this.Layers[i].getLayerOutput(networkOutput);
+			// console.log(
+			// 	`layer (${i + 1}/${this.Layers.length}) (isInput?:${
+			// 		this.Layers[i].isInputLayer
+			// 	}) output:`,
+			// 	networkOutput
+			// );
+		}
+
+		return networkOutput;
 	}
 
 	public train(

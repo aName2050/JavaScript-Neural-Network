@@ -13,24 +13,27 @@ export class Neuron {
 	) {
 		if (isInputNode) {
 			this.bias = 0;
-			this.weights = [1];
+			this.weights = [];
 			return;
 		}
 
-		console.log(`INIT in: ${totalInputs}`, `out: ${totalOutputs}`);
+		// console.log(`INIT in: ${totalInputs}`, `out: ${totalOutputs}`);
 
 		this.bias = Random(0.5, -0.5);
 		this.weights = Array.from({ length: totalInputs }, () =>
 			this.Xavier(totalInputs, totalOutputs)
 		);
 
-		console.log(`INIT bias: ${this.bias} weights: ${this.weights}`);
+		// console.log(`INIT bias: ${this.bias} weights: ${this.weights}`);
 	}
 
 	public getNeuronOutput(neuronInputs: number[]): number {
 		let z: number = NetworkMath.DotProduct(neuronInputs, this.weights);
+		let NeuronActivation: number = ActivationFunctions.Sigmoid(
+			z + this.bias
+		);
 
-		return ActivationFunctions.Sigmoid(z + this.bias);
+		return NeuronActivation;
 	}
 
 	private Xavier(inSize: number, outSize: number): number {
