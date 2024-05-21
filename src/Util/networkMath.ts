@@ -33,12 +33,14 @@ class NNMath {
 		z: number,
 		x: number
 	): number {
-		//prettier-ignore
-		return (
-			weight -
-			(learnRate *
-				gradient.CostGradientWithRespectToWi(network, dataset, z, x))
+		const CG_Wi = gradient.CostGradientWithRespectToWi(
+			network,
+			dataset,
+			z,
+			x
 		);
+		console.log(`cost grad / weight[i]: ${CG_Wi}`);
+		return weight - learnRate * CG_Wi;
 	}
 
 	public UpdateBias(
@@ -48,12 +50,13 @@ class NNMath {
 		dataset: number[],
 		z: number
 	): number {
-		//prettier-ignore
-		return (
-			bias -
-			(learnRate *
-				gradient.CostGradientWithRespectToBias(network, dataset, z))
+		const CG_B = gradient.CostGradientWithRespectToBias(
+			network,
+			dataset,
+			z
 		);
+		console.log(`cost grad / bias: ${CG_B}`);
+		return bias - learnRate * CG_B;
 	}
 }
 

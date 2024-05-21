@@ -11,14 +11,26 @@ export class NeuralNetwork {
 		outputLayerSize: number
 	) {
 		// input layer
-		this.Layers.push(new Layer(inputLayerSize, 0, true));
+		this.Layers.push(
+			new Layer(
+				inputLayerSize,
+				hiddenLayerConfig[0] || outputLayerSize,
+				0,
+				true
+			)
+		);
 
 		// hidden layers
 		for (let i = 0; i < hiddenLayerConfig.length; i++) {
 			const prevLayer = this.Layers[this.Layers.length - 1];
 
 			this.Layers.push(
-				new Layer(hiddenLayerConfig[i], prevLayer.Neurons.length, false)
+				new Layer(
+					hiddenLayerConfig[i],
+					hiddenLayerConfig[i + 1] || outputLayerSize,
+					prevLayer.Neurons.length,
+					false
+				)
 			);
 		}
 
@@ -26,6 +38,7 @@ export class NeuralNetwork {
 		this.Layers.push(
 			new Layer(
 				outputLayerSize,
+				0,
 				this.Layers[this.Layers.length - 1].Neurons.length,
 				false
 			)
@@ -41,23 +54,8 @@ export class NeuralNetwork {
 	 * @returns The output layer
 	 */
 	public forwardPropagation(networkInputs: number[]): number[] {
-		let networkOutput: number[] = [];
-
-		let layerOutput: number[] = networkInputs;
-
-		for (let i = 1; i < this.Layers.length; i++) {
-			let layerOutAsArray: number[] = [];
-			for (let j = 0; j < this.Layers[i].Neurons.length; j++) {
-				const layerOut = this.Layers[i].getLayerOutput(layerOutput);
-				// console.log(layerOut);
-				layerOutAsArray.push(layerOut);
-			}
-
-			layerOutput = layerOutAsArray;
-			networkOutput = layerOutput;
-		}
-
-		return networkOutput;
+		// TODO: implement new forward propagation algorithm
+		return [0];
 	}
 
 	public train(

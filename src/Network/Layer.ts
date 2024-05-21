@@ -5,18 +5,19 @@ export class Layer {
 
 	constructor(
 		layerSize: number,
+		nextLayerSize: number,
 		prevLayerSize?: number,
 		isInputLayer?: boolean
 	) {
 		if (isInputLayer || !prevLayerSize) {
 			for (let i = 0; i < layerSize; i++) {
-				this.Neurons.push(new Neuron(0, true));
+				this.Neurons.push(new Neuron(0, nextLayerSize, true));
 			}
 			return;
 		}
 
 		for (let i = 0; i < layerSize; i++) {
-			this.Neurons.push(new Neuron(prevLayerSize!, false));
+			this.Neurons.push(new Neuron(prevLayerSize!, nextLayerSize, false));
 		}
 	}
 

@@ -6,20 +6,35 @@ export class Neuron {
 	public weights: number[];
 	public bias: number;
 
-	constructor(totalInputs: number, isInputNode?: boolean) {
+	constructor(
+		totalInputs: number,
+		totalOutputs: number,
+		isInputNode?: boolean
+	) {
 		if (isInputNode) {
 			this.bias = 0;
 			this.weights = [1];
 			return;
 		}
 
-		this.bias = Random(-1, 1);
-		this.weights = Array.from({ length: totalInputs }, () => Random(-1, 1));
+		console.log(`INIT in: ${totalInputs}`, `out: ${totalOutputs}`);
+
+		this.bias = Random(0.5, -0.5);
+		this.weights = Array.from({ length: totalInputs }, () =>
+			this.Xavier(totalInputs, totalOutputs)
+		);
+
+		console.log(`INIT bias: ${this.bias} weights: ${this.weights}`);
 	}
 
 	public getNeuronOutput(neuronInputs: number[]): number {
 		let z: number = NetworkMath.DotProduct(neuronInputs, this.weights);
 
 		return ActivationFunctions.Sigmoid(z + this.bias);
+	}
+
+	private Xavier(inSize: number, outSize: number): number {
+		const limit = Math.sqrt(6 / (inSize + outSize));
+		return Random(limit, -limit);
 	}
 }

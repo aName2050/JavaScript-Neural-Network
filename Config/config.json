@@ -1,4 +1,4 @@
 {
-	"learnCycles": 10,
-	"learnRate": 0.05
+	"learnCycles": 2,
+	"learnRate": 0.01
 }
