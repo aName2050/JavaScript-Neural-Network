@@ -78,7 +78,7 @@ export class NeuralNetwork {
 		 */
 		const networkOutputs: number[] = this.forwardPropagation(networkInputs);
 		const cost = NetworkMath.Cost(networkOutputs, dataset);
-		console.log('cost:', cost);
+		// console.log('cost:', cost);
 
 		// Backpropagation algorithm (using gradient descent)
 		// back propagation: forward propagation but backwards
