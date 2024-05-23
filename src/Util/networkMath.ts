@@ -39,7 +39,7 @@ class NNMath {
 			z,
 			x
 		);
-		console.log(`cost grad / weight[i]: ${CG_Wi}`);
+		// console.log(`cost grad / weight[i]: ${CG_Wi}`);
 		return weight - learnRate * CG_Wi;
 	}
 
@@ -55,7 +55,7 @@ class NNMath {
 			dataset,
 			z
 		);
-		console.log(`cost grad / bias: ${CG_B}`);
+		// console.log(`cost grad / bias: ${CG_B}`);
 		return bias - learnRate * CG_B;
 	}
 }
