@@ -20,11 +20,11 @@ export interface Dataset {
 
 export class MNIST {
 	private RAW: number[][];
-	public DATASET: Dataset['data'];
+	public DATASET: Dataset;
 
 	constructor() {
 		this.RAW = [];
-		this.DATASET = [];
+		this.DATASET = { 'data': [] };
 	}
 
 	public preprocess(): void {
@@ -39,8 +39,34 @@ export class MNIST {
 		this.RAW.push(JSON_8.data);
 		this.RAW.push(JSON_9.data);
 
-		// this.DATASET = this.process(this.RAW);
+		this.DATASET = this.process(this.RAW);
 	}
 
-	// TODO: implement pre-processing to MNIST dataset
+	private process(raw: number[][]): Dataset {
+		let result: Dataset = { 'data': new Array<DataStructure>() } as Dataset;
+
+		// loop through the 10 digits
+		for (let i = 0; i < 10; i++) {
+			result['data'][i] = this.processRaw(raw[i], i);
+		}
+
+		return result;
+	}
+
+	private processRaw(data: number[], digit: number): DataStructure {
+		let result: DataStructure = { 'input': [], 'output': [] };
+		const pixels: number = 28 * 28;
+
+		const total: number = data.length / pixels;
+
+		for (let i = 0; i < total; i++) {
+			let nextInput = data.slice(i * pixels, i * pixels + pixels);
+			let nextOutput = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+			nextOutput[digit] = 1;
+			result['input'] = nextInput;
+			result['output'] = nextOutput;
+		}
+
+		return result;
+	}
 }
