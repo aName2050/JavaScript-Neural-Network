@@ -12,7 +12,7 @@ const nn = new NeuralNetwork(2, [3], 2);
 const testData = [23, 3];
 
 // pre-training
-// console.log('PRE-TRAINING...');
+console.log('PRE-TRAINING...');
 console.log(nn.forwardPropagation(testData));
 
 // training
