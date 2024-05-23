@@ -1,15 +1,19 @@
+import { ActivationFunction } from '../Util/activation';
 import { gradient } from '../Util/gradients';
 import { NetworkMath } from '../Util/networkMath';
 import { Layer } from './Layer';
 
 export class NeuralNetwork {
 	public Layers: Layer[] = [];
+	private activation: ActivationFunction;
 
 	constructor(
 		inputLayerSize: number,
 		hiddenLayerConfig: number[],
-		outputLayerSize: number
+		outputLayerSize: number,
+		activationFunction: ActivationFunction
 	) {
+		this.activation = activationFunction;
 		// input layer
 		this.Layers.push(
 			new Layer(
@@ -54,7 +58,10 @@ export class NeuralNetwork {
 		let networkOutput: number[] = networkInputs;
 
 		for (let i = 1; i < this.Layers.length; i++) {
-			networkOutput = this.Layers[i].getLayerOutput(networkOutput);
+			networkOutput = this.Layers[i].getLayerOutput(
+				networkOutput,
+				this.activation
+			);
 			// console.log(
 			// 	`layer (${i + 1}/${this.Layers.length}) (isInput?:${
 			// 		this.Layers[i].isInputLayer
@@ -78,7 +85,7 @@ export class NeuralNetwork {
 		 */
 		const networkOutputs: number[] = this.forwardPropagation(networkInputs);
 		const cost = NetworkMath.Cost(networkOutputs, dataset);
-		// console.log('cost:', cost);
+		console.log('cost:', cost);
 
 		// Backpropagation algorithm (using gradient descent)
 		// back propagation: forward propagation but backwards
@@ -92,10 +99,9 @@ export class NeuralNetwork {
 				neuron < this.Layers[layer].Neurons.length;
 				neuron++
 			) {
-				const Z: number =
-					this.Layers[layer].Neurons[neuron].getNeuronOutput(
-						layerOut
-					);
+				const Z: number = this.Layers[layer].Neurons[
+					neuron
+				].getNeuronOutput(layerOut, this.activation);
 				currLayerOut.push(Z);
 
 				// update each weight

@@ -15,8 +15,8 @@ class NNActivation {
 		return Math.max(0, z);
 	}
 
-	public LeakyReLU(a: number, x: number): number {
-		return Math.max(a * x, x);
+	public LeakyReLU(x: number): number {
+		return Math.max(0.01 * x, x);
 	}
 }
 
@@ -42,11 +42,30 @@ class NNActivationDerivative {
 		return x < 0 ? 0 : 1;
 	}
 
-	public LeakyReLU(a: number, x: number): number {
-		return x < 0 ? a : 1;
+	public LeakyReLU(x: number): number {
+		return x < 0 ? x : 1;
 	}
 }
 
 export const Derivatives = new NNActivationDerivative();
 
 export { NNActivation, NNActivationDerivative };
+
+export enum ActivationFunction {
+	Sigmoid,
+	Linear,
+	Tanh,
+	ReLU,
+	LeakyReLU,
+}
+
+export const ActivationFunctionDictionary: Record<
+	ActivationFunction,
+	(x: number) => number
+> = {
+	[ActivationFunction.Sigmoid]: ActivationFunctions.Sigmoid,
+	[ActivationFunction.Linear]: ActivationFunctions.Linear,
+	[ActivationFunction.Tanh]: ActivationFunctions.Tanh,
+	[ActivationFunction.ReLU]: ActivationFunctions.ReLU,
+	[ActivationFunction.LeakyReLU]: ActivationFunctions.LeakyReLU,
+};

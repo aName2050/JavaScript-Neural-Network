@@ -1,4 +1,8 @@
-import { ActivationFunctions } from '../Util/activation';
+import {
+	ActivationFunction,
+	ActivationFunctionDictionary,
+	ActivationFunctions,
+} from '../Util/activation';
 import { NetworkMath } from '../Util/networkMath';
 import { Random } from '../Util/math';
 
@@ -27,11 +31,15 @@ export class Neuron {
 		// console.log(`INIT bias: ${this.bias} weights: ${this.weights}`);
 	}
 
-	public getNeuronOutput(neuronInputs: number[]): number {
+	public getNeuronOutput(
+		neuronInputs: number[],
+		activationFunction: ActivationFunction
+	): number {
 		let z: number = NetworkMath.DotProduct(neuronInputs, this.weights);
-		let NeuronActivation: number = ActivationFunctions.Sigmoid(
-			z + this.bias
-		);
+
+		let NeuronActivation: number = ActivationFunctionDictionary[
+			activationFunction
+		](z + this.bias);
 
 		return NeuronActivation;
 	}

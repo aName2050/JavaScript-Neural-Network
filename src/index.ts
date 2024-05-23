@@ -1,19 +1,17 @@
 import { NeuralNetwork } from './Network/Network';
 import { learnCycles, learnRate } from '../Config/config.json';
 import Dataset from '../Config/Data/dataset.json';
+import { output } from './Util/output';
+import { ActivationFunction } from './Util/activation';
 
-/**
- * 2 nodes in input layer
- * 3 nodes in first hidden layer
- * 2 nodes in output layer
- */
-const nn = new NeuralNetwork(2, [3], 2);
+const nn = new NeuralNetwork(1, [5, 5, 5], 1, ActivationFunction.LeakyReLU);
 
-const testData = [23, 3];
+const testData = [3]; // expect: 3.4
 
 // pre-training
 console.log('PRE-TRAINING...');
-console.log(nn.forwardPropagation(testData));
+output(nn.forwardPropagation(testData));
+// console.log(nn.forwardPropagation(testData));
 
 // training
 const { data } = Dataset;
@@ -28,4 +26,5 @@ for (let i = 0; i < learnCycles; i++) {
 
 // post-training
 console.log('POST-TRAINING...');
-console.log(nn.forwardPropagation(testData));
+output(nn.forwardPropagation(testData));
+// console.log(nn.forwardPropagation(testData));

@@ -1,3 +1,4 @@
+import { ActivationFunction } from '../Util/activation';
 import { Neuron } from './Neuron';
 
 export class Layer {
@@ -26,10 +27,13 @@ export class Layer {
 	/**
 	 * The result of this method should be passed to the next layer, if any
 	 */
-	public getLayerOutput(inputs: number[]): number[] {
+	public getLayerOutput(
+		inputs: number[],
+		activationFunction: ActivationFunction
+	): number[] {
 		let z: number[] = [];
 		for (const neuron of this.Neurons) {
-			z.push(neuron.getNeuronOutput(inputs));
+			z.push(neuron.getNeuronOutput(inputs, activationFunction));
 		}
 		return z;
 	}
