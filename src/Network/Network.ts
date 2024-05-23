@@ -116,17 +116,17 @@ export class NeuralNetwork {
 							layerOut[weight]
 						);
 
-					console.log(
-						`TRAINING... layer:${layer + 1}/${
-							this.Layers.length
-						} neuron:${neuron + 1}/${
-							this.Layers[layer].Neurons.length
-						} weight:${weight + 1}/${
-							this.Layers[layer].Neurons[neuron].weights.length
-						} oldWeight: ${oldWeight} newWeight: ${
-							this.Layers[layer].Neurons[neuron].weights[weight]
-						}`
-					);
+					// console.log(
+					// 	`TRAINING... layer:${layer + 1}/${
+					// 		this.Layers.length
+					// 	} neuron:${neuron + 1}/${
+					// 		this.Layers[layer].Neurons.length
+					// 	} weight:${weight + 1}/${
+					// 		this.Layers[layer].Neurons[neuron].weights.length
+					// 	} oldWeight: ${oldWeight} newWeight: ${
+					// 		this.Layers[layer].Neurons[neuron].weights[weight]
+					// 	}`
+					// );
 				}
 
 				const oldBias = this.Layers[layer].Neurons[neuron].bias;

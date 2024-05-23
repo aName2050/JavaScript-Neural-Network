@@ -18,14 +18,14 @@ console.log(nn.forwardPropagation(testData));
 // training
 const { data } = Dataset;
 
-// for (let i = 0; i < learnCycles; i++) {
-// 	console.log(`Learn cycle (${i + 1}/${learnCycles})`);
-// 	for (let d = 0; d < data.length; d++) {
-// 		console.log(`Data (${d + 1}/${data.length})`);
-// 		nn.train(data[d].input, data[d].output, learnRate);
-// 	}
-// }
+for (let i = 0; i < learnCycles; i++) {
+	// console.log(`Learn cycle (${i + 1}/${learnCycles})`);
+	for (let d = 0; d < data.length; d++) {
+		// console.log(`Data (${d + 1}/${data.length})`);
+		nn.train(data[d].input, data[d].output, learnRate);
+	}
+}
 
 // post-training
-// console.log('POST-TRAINING...');
-// console.log(nn.forwardPropagation(testData));
+console.log('POST-TRAINING...');
+console.log(nn.forwardPropagation(testData));
