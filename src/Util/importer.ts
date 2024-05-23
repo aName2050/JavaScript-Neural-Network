@@ -39,28 +39,8 @@ export class MNIST {
 		this.RAW.push(JSON_8.data);
 		this.RAW.push(JSON_9.data);
 
-		this.DATASET = this.process(this.RAW);
+		// this.DATASET = this.process(this.RAW);
 	}
 
-	private process(rawData: number[][]): DataStructure[] {
-		let result: DataStructure[] = [];
-		// loop through the 10 digits
-		for (let i = 0; i < 10; i++) {
-			result[i] = this.processRawData(rawData[i], i);
-		}
-		return result;
-	}
-
-	private processRawData(raw: number[], num: number): DataStructure {
-		let result = [];
-		const pixels: number = 28 * 28;
-		const totalNumber = data.length / pixels;
-		for (let i = 0; i < totalNumber; i++) {
-			const nextInput = data.slice(i * pixels, i * pixels + pixels);
-			let nextOutput = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-			nextOutput[num] = 1;
-			result.push({ 'input': nextInput, 'output': nextOutput });
-		}
-		return result;
-	}
+	// TODO: implement pre-processing to MNIST dataset
 }
