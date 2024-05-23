@@ -138,15 +138,15 @@ export class NeuralNetwork {
 						dataset,
 						Z
 					);
-				console.log(
-					`TRAINING... layer:${layer + 1}/${
-						this.Layers.length
-					} neuron:${neuron + 1}/${
-						this.Layers[layer].Neurons.length
-					} oldBias: ${oldBias} newBias: ${
-						this.Layers[layer].Neurons[neuron].bias
-					}`
-				);
+				// console.log(
+				// 	`TRAINING... layer:${layer + 1}/${
+				// 		this.Layers.length
+				// 	} neuron:${neuron + 1}/${
+				// 		this.Layers[layer].Neurons.length
+				// 	} oldBias: ${oldBias} newBias: ${
+				// 		this.Layers[layer].Neurons[neuron].bias
+				// 	}`
+				// );
 			}
 
 			layerOut = currLayerOut;
