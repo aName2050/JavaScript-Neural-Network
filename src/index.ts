@@ -26,5 +26,10 @@ for (let i = 0; i < learnCycles; i++) {
 
 // post-training
 console.log('POST-TRAINING...');
+console.log('3+0.4');
 output(nn.forwardPropagation(testData));
+console.log('5.8+0.4'); // expect 6.2
+output(nn.forwardPropagation([5.8]));
+console.log('50+0.4'); // expect 50.4
+output(nn.forwardPropagation([50]));
 // console.log(nn.forwardPropagation(testData));
