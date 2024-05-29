@@ -22,6 +22,8 @@ app.get('/', (_req, res, _next) => {
 // API
 app.post('/api/v2/nn/predict', (req, res, _next) => {
 	const netowrkInputs: number[] = req.body;
+	console.log('in request');
+	console.log((netowrkInputs as any).inputs);
 	const networkOutput: number[] = nn.forwardPropagation(netowrkInputs);
 	res.json(JSON.stringify(networkOutput));
 });
