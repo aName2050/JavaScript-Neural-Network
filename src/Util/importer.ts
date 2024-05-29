@@ -1,13 +1,13 @@
-import * as JSON_0 from '../../Config/MNIST/digits/0.json';
-import * as JSON_1 from '../../Config/MNIST/digits/1.json';
-import * as JSON_2 from '../../Config/MNIST/digits/2.json';
-import * as JSON_3 from '../../Config/MNIST/digits/3.json';
-import * as JSON_4 from '../../Config/MNIST/digits/4.json';
-import * as JSON_5 from '../../Config/MNIST/digits/5.json';
-import * as JSON_6 from '../../Config/MNIST/digits/6.json';
-import * as JSON_7 from '../../Config/MNIST/digits/7.json';
-import * as JSON_8 from '../../Config/MNIST/digits/8.json';
-import * as JSON_9 from '../../Config/MNIST/digits/9.json';
+// import * as JSON_0 from '../../Config/MNIST/digits/0.json';
+// import * as JSON_1 from '../../Config/MNIST/digits/1.json';
+// import * as JSON_2 from '../../Config/MNIST/digits/2.json';
+// import * as JSON_3 from '../../Config/MNIST/digits/3.json';
+// import * as JSON_4 from '../../Config/MNIST/digits/4.json';
+// import * as JSON_5 from '../../Config/MNIST/digits/5.json';
+// import * as JSON_6 from '../../Config/MNIST/digits/6.json';
+// import * as JSON_7 from '../../Config/MNIST/digits/7.json';
+// import * as JSON_8 from '../../Config/MNIST/digits/8.json';
+// import * as JSON_9 from '../../Config/MNIST/digits/9.json';
 
 export interface DataStructure {
 	'input': number[];
@@ -28,15 +28,28 @@ export class MNIST {
 	}
 
 	public preprocess(): void {
+		// ignore errors for these as the imports are commented out
+		// until use for intellisense performance reasons
+
+		//@ts-ignore
 		this.RAW.push(JSON_0.data);
+		//@ts-ignore
 		this.RAW.push(JSON_1.data);
+		//@ts-ignore
 		this.RAW.push(JSON_2.data);
+		//@ts-ignore
 		this.RAW.push(JSON_3.data);
+		//@ts-ignore
 		this.RAW.push(JSON_4.data);
+		//@ts-ignore
 		this.RAW.push(JSON_5.data);
+		//@ts-ignore
 		this.RAW.push(JSON_6.data);
+		//@ts-ignore
 		this.RAW.push(JSON_7.data);
+		//@ts-ignore
 		this.RAW.push(JSON_8.data);
+		//@ts-ignore
 		this.RAW.push(JSON_9.data);
 
 		this.DATASET = this.process(this.RAW);
