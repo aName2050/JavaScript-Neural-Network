@@ -1,3 +1,23 @@
 #canvas {
 	border: 1px solid black;
+	width: 280px;
+	height: 280px;
+	line-height: 0;
+}
+
+button.pixel {
+	width: 10px;
+	height: 10px;
+	padding: 0;
+	margin: 0;
+	border-radius: 0;
+	border: 0;
+}
+
+button:hover:not(.active) {
+	background-color: grey;
+}
+
+.active {
+	background-color: black;
 }

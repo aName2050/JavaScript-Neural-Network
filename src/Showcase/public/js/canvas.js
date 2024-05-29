@@ -1,57 +1,50 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-let drawing = false;
-
-canvas.addEventListener('mousedown', () => {
-	drawing = true;
+window.onload = () => {
+	const canvas = document.getElementById('canvas');
+	let buttons = [];
+	for (let i = 0; i < 784; i++) {
+		buttons.push(
+			'<button class="pixel" onclick="handleDraw(this)"></button>'
+		);
+	}
+	canvas.innerHTML = buttons.join('');
+};
+let mousedown = false;
+window.addEventListener('mousedown', () => {
+	mousedown = true;
+});
+window.addEventListener('mouseup', () => {
+	mousedown = false;
 });
 
-canvas.addEventListener('mouseup', () => {
-	drawing = false;
-	ctx.beginPath();
-});
+// TODO: handle new canvas with buttons
 
-canvas.addEventListener('mousemove', draw);
-
-function draw(event) {
-	if (!drawing) return;
-
-	ctx.lineWidth = 10;
-	ctx.lineCap = 'round';
-
-	ctx.lineTo(
-		event.clientX - canvas.offsetLeft,
-		event.clientY - canvas.offsetTop
-	);
-	ctx.stroke();
-	ctx.beginPath();
-	ctx.moveTo(
-		event.clientX - canvas.offsetLeft,
-		event.clientY - canvas.offsetTop
-	);
+/**
+ *
+ * @param {HTMLButtonElement} px
+ */
+function handleDraw(px) {
+	if (px.classList.contains('active')) {
+		px.classList.remove('active');
+	} else {
+		px.classList.add('active');
+	}
 }
 
 function getImageData() {
-	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-	const data = imageData.data;
-	const grayscale = [];
+	let pixels = [];
 
-	for (let i = 0; i < data.length; i += 4) {
-		const r = data[i];
-		const g = data[i + 1];
-		const b = data[i + 2];
-		const gray = (r + g + b) / 3;
-		grayscale.push(gray / 255); // Normalize to [0, 1]
+	const pixelElements = document.getElementsByClassName('pixel');
+	for (let i = 0; i < pixelElements.length; i++) {
+		if (pixelElements[i].classList.contains('active')) pixels.push(1);
+		else pixels.push(0);
 	}
 
-	console.log(grayscale);
-
-	return grayscale;
+	return pixels;
 }
 
 document.getElementById('predict').addEventListener('click', async () => {
 	const input = getImageData();
-	const response = await fetch('http://localhost:8000/api/v2/nn/predict', {
+	const response = await fetch('/api/v2/nn/predict', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -63,4 +56,11 @@ document.getElementById('predict').addEventListener('click', async () => {
 	document.getElementById(
 		'result'
 	).innerText = `Prediction: ${result.prediction}`;
+});
+
+document.getElementById('clear').addEventListener('click', async () => {
+	const pixels = document.getElementsByClassName('pixel');
+	for (let i = 0; i < pixels.length; i++) {
+		pixels[i].classList.remove('active');
+	}
 });
