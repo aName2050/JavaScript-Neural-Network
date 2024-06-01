@@ -2,8 +2,6 @@ import { gradient } from './gradients';
 
 class NNMath {
 	public DotProduct(x: number[], y: number[]): number {
-		console.log('in dot product func');
-		console.log(x);
 		return x.map((v, i) => v * y[i]).reduce((pV, cV) => pV + cV);
 	}
 

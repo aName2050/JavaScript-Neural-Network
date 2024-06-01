@@ -1,33 +1,46 @@
-window.onload = () => {
+window.onload = async () => {
 	const canvas = document.getElementById('canvas');
 	let buttons = [];
 	for (let i = 0; i < 784; i++) {
-		buttons.push(
-			'<button class="pixel" onclick="handleDraw(this)"></button>'
-		);
+		buttons.push('<button class="pixel"</button>');
 	}
 	canvas.innerHTML = buttons.join('');
-};
-let mousedown = false;
-window.addEventListener('mousedown', () => {
-	mousedown = true;
-});
-window.addEventListener('mouseup', () => {
-	mousedown = false;
-});
 
-// TODO: handle new canvas with buttons
+	let isDrawing = false;
+
+	const pixelButtons = document.querySelectorAll('button.pixel');
+	pixelButtons.forEach(px => {
+		px.addEventListener('mousedown', () => {
+			isDrawing = true;
+			handleDraw(px);
+		});
+
+		px.addEventListener('mousemove', () => {
+			if (isDrawing) handleDraw(px);
+		});
+
+		px.addEventListener('mouseup', () => {
+			isDrawing = false;
+		});
+	});
+
+	canvas.addEventListener('mouseleave', () => {
+		isDrawing = false;
+	});
+
+	document.addEventListener('mouseup', () => {
+		isDrawing = false;
+	});
+
+	getStatus();
+};
 
 /**
  *
  * @param {HTMLButtonElement} px
  */
 function handleDraw(px) {
-	if (px.classList.contains('active')) {
-		px.classList.remove('active');
-	} else {
-		px.classList.add('active');
-	}
+	px.classList.add('active');
 }
 
 function getImageData() {
@@ -42,6 +55,41 @@ function getImageData() {
 	return pixels;
 }
 
+async function getStatus() {
+	const response = await fetch('/api/v2/nn/status', {
+		method: 'GET',
+	});
+	const result = (await response.json()).status;
+	// type NetworkState =
+	// | 'NOT_READY'
+	// | 'READY_FOR_TRAINING'
+	// | 'TRAINING'
+	// | 'READY_FOR_PREDICTING'
+	// | 'PREDICTING';
+	let out;
+	switch (result) {
+		case 'NOT_READY':
+			out = 'Network is not ready yet';
+			break;
+		case 'READY_FOR_TRAINING':
+			out = 'Network is ready for training';
+			break;
+		case 'TRAINING':
+			out = 'Please wait, the network is training';
+			break;
+		case 'READY_FOR_PREDICTING':
+			out = 'The network is ready!';
+			break;
+		case 'PREDICTING':
+			out = 'Waiting for network response...';
+			break;
+		default:
+			out = 'Unknown network state';
+			break;
+	}
+	document.getElementById('result').innerText = `${out}`;
+}
+
 document.getElementById('predict').addEventListener('click', async () => {
 	const input = getImageData();
 	const response = await fetch('/api/v2/nn/predict', {
@@ -52,10 +100,9 @@ document.getElementById('predict').addEventListener('click', async () => {
 		body: JSON.stringify({ input }),
 	});
 
-	const result = await response.json();
-	document.getElementById(
-		'result'
-	).innerText = `Prediction: ${result.prediction}`;
+	const result = JSON.parse(await response.json()).output;
+
+	document.getElementById('result').innerText = `Prediction: \n${result}`;
 });
 
 document.getElementById('clear').addEventListener('click', async () => {
@@ -64,3 +111,22 @@ document.getElementById('clear').addEventListener('click', async () => {
 		pixels[i].classList.remove('active');
 	}
 });
+
+document.getElementById('beginTraining').addEventListener('click', async () => {
+	const response = await fetch('/api/v2/nn/train', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	const result = JSON.parse(await response.json());
+
+	document.getElementById('result').innerText = `${result.message}`;
+});
+
+document
+	.getElementById('checkTrainingStatus')
+	.addEventListener('click', async () => {
+		getStatus();
+	});

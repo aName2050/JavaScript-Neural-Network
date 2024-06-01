@@ -1,11 +1,19 @@
 import { ActivationFunction } from '../Util/activation';
-import { gradient } from '../Util/gradients';
 import { NetworkMath } from '../Util/networkMath';
 import { Layer } from './Layer';
+
+type NetworkState =
+	| 'NOT_READY'
+	| 'READY_FOR_TRAINING'
+	| 'TRAINING'
+	| 'READY_FOR_PREDICTING'
+	| 'PREDICTING';
 
 export class NeuralNetwork {
 	public Layers: Layer[] = [];
 	private activation: ActivationFunction;
+	public STATE: NetworkState = 'NOT_READY';
+	public TRAINED: boolean = false;
 
 	constructor(
 		inputLayerSize: number,
@@ -13,6 +21,7 @@ export class NeuralNetwork {
 		outputLayerSize: number,
 		activationFunction: ActivationFunction
 	) {
+		this.STATE = 'READY_FOR_TRAINING';
 		this.activation = activationFunction;
 		// input layer
 		this.Layers.push(
@@ -55,6 +64,7 @@ export class NeuralNetwork {
 	 * @returns The output layer
 	 */
 	public forwardPropagation(networkInputs: number[]): number[] {
+		this.STATE = 'PREDICTING';
 		let networkOutput: number[] = networkInputs;
 
 		for (let i = 1; i < this.Layers.length; i++) {
@@ -69,7 +79,9 @@ export class NeuralNetwork {
 			// 	networkOutput
 			// );
 		}
-
+		this.STATE = !this.TRAINED
+			? 'READY_FOR_TRAINING'
+			: 'READY_FOR_PREDICTING';
 		return networkOutput;
 	}
 
@@ -78,6 +90,7 @@ export class NeuralNetwork {
 		dataset: number[],
 		learnRate: number
 	): void {
+		this.STATE = 'TRAINING';
 		/**
 		 * !! CALCULUS !!
 		 *
@@ -157,5 +170,8 @@ export class NeuralNetwork {
 
 			layerOut = currLayerOut;
 		}
+
+		this.STATE = 'READY_FOR_PREDICTING';
+		this.TRAINED = true;
 	}
 }
