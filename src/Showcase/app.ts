@@ -2,16 +2,22 @@ import express, { Application } from 'express';
 import path from 'node:path';
 import { SERVER } from '../../Config/config.json';
 import bodyParser from 'body-parser';
-
+import { ChildProcess, fork } from 'child_process';
 import { nn } from '../index';
-
-import { learnCycles, learnRate } from '../../Config/config.json';
 import { output } from '../Util/output';
-
-import { MNIST } from '../Util/importer';
 
 export const app: Application = express();
 export const PORT: number = SERVER.PORT;
+
+const child: ChildProcess = fork('./src/Network/train', [], {
+	execArgv: ['-r', 'ts-node/register'],
+});
+
+child.on('message', (message: string) => {
+	if (message === 'finishedTraining') {
+		console.log('Training finished...');
+	}
+});
 
 // application/json
 app.use(bodyParser.json());
@@ -44,6 +50,14 @@ app.get('/api/v2/nn/status', (_req, res, _next) => {
 });
 
 app.post('/api/v2/nn/train', (_req, res, _next) => {
+	child.send('beginTraining');
+	if (nn.STATE === 'TRAINING') {
+		return res.status(400).json({
+			message: 'Network is already training',
+			status: nn.STATE.toString(),
+		});
+	}
+	nn.STATE = 'TRAINING';
 	res.status(200).json({
 		message: 'Training has started...',
 		status: nn.STATE.toString(),

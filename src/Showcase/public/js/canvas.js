@@ -120,7 +120,7 @@ document.getElementById('beginTraining').addEventListener('click', async () => {
 		},
 	});
 
-	const result = JSON.parse(await response.json());
+	const result = await response.json();
 
 	document.getElementById('result').innerText = `${result.message}`;
 });

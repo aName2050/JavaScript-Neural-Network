@@ -5,15 +5,10 @@ export function output(output: number[]): string {
 	);
 	const outputs: string[] = new Array();
 	output.forEach((value, index) => {
-		// console.log(
-		// 	`${index}: Confidence: ${confidencePercent[index]
-		// 		.toFixed(2)
-		// 		.padStart(6, ' ')}% (RAW:${value})`
-		// );
 		outputs.push(
 			`${index}: Confidence: ${confidencePercent[index]
 				.toFixed(2)
-				.padStart(5, ' ')}% (RAW:${value})`
+				.padStart(5, ' ')}%`
 		);
 	});
 	const outputString = outputs.join('\n');
