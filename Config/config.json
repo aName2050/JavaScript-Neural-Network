@@ -1,5 +1,5 @@
 {
-	"learnCycles": 50000,
+	"learnCycles": 10,
 	"learnRate": 0.05,
 	"SERVER": {
 		"PORT": 8000

@@ -2,20 +2,26 @@ import express, { Application } from 'express';
 import path from 'node:path';
 import { SERVER } from '../../Config/config.json';
 import bodyParser from 'body-parser';
-import { ChildProcess, fork } from 'child_process';
+import { Worker } from 'node:worker_threads';
 import { nn } from '../index';
 import { output } from '../Util/output';
+import { NeuralNetwork } from '../Network/Network';
 
 export const app: Application = express();
 export const PORT: number = SERVER.PORT;
 
-const child: ChildProcess = fork('./src/Network/train', [], {
+let network: NeuralNetwork = nn;
+
+const trainScript: string = './src/Network/train.ts';
+const worker = new Worker(trainScript, {
+	workerData: JSON.stringify(nn),
 	execArgv: ['-r', 'ts-node/register'],
 });
 
-child.on('message', (message: string) => {
-	if (message === 'finishedTraining') {
-		console.log('Training finished...');
+worker.on('message', (data: [string, string]) => {
+	if (data[0] === 'finishedTraining') {
+		network = JSON.parse(data[1]);
+		nn.STATE = 'READY_FOR_PREDICTING';
 	}
 });
 
@@ -50,14 +56,13 @@ app.get('/api/v2/nn/status', (_req, res, _next) => {
 });
 
 app.post('/api/v2/nn/train', (_req, res, _next) => {
-	child.send('beginTraining');
+	worker.postMessage('beginTraining');
 	if (nn.STATE === 'TRAINING') {
 		return res.status(400).json({
 			message: 'Network is already training',
 			status: nn.STATE.toString(),
 		});
 	}
-	nn.STATE = 'TRAINING';
 	res.status(200).json({
 		message: 'Training has started...',
 		status: nn.STATE.toString(),

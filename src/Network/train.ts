@@ -1,8 +1,12 @@
 import { MNIST } from '../Util/importer';
-import { nn } from '../index';
 import { NeuralNetwork } from './Network';
+import { Worker, workerData, parentPort } from 'node:worker_threads';
 
 import { learnCycles, learnRate } from '../../Config/config.json';
+
+const nn = JSON.parse(workerData);
+
+// fixme: i dont know why this doesnt work, and i dont know how to fix it.
 
 const mnist = new MNIST();
 mnist.preprocess();
@@ -25,9 +29,9 @@ const trainNetwork = (network: NeuralNetwork) => {
 	console.log(`Training finished in ${Date.now() - trainStart}ms`);
 };
 
-process.on('message', (message: string) => {
+parentPort?.on('message', (message: string) => {
 	if (message === 'beginTraining') {
 		trainNetwork(nn);
-		process.send?.('finishedTraining');
+		parentPort?.postMessage('finishedTraining');
 	}
 });
