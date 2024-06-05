@@ -100,9 +100,11 @@ document.getElementById('predict').addEventListener('click', async () => {
 		body: JSON.stringify({ input }),
 	});
 
-	const result = JSON.parse(await response.json()).output;
+	const result = JSON.parse(await response.json());
 
-	document.getElementById('result').innerText = `Prediction: \n${result}`;
+	document.getElementById(
+		'result'
+	).innerText = `Prediction: \n${result.networkChoice}\n\nNetwork Confidence: \n${result.output}`;
 });
 
 document.getElementById('clear').addEventListener('click', async () => {

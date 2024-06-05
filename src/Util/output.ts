@@ -1,4 +1,7 @@
-export function output(output: number[]): string {
+export function output(output: number[]): {
+	networkChoice: string;
+	output: string;
+} {
 	const sumOutput: number = output.reduce((acc, val) => acc + val, 0);
 	const confidencePercent: number[] = output.map(
 		value => (value / sumOutput) * 100
@@ -13,5 +16,8 @@ export function output(output: number[]): string {
 	});
 	const outputString = outputs.join('\n');
 	console.log(outputString);
-	return outputString;
+	return {
+		output: outputString,
+		networkChoice: String(output.indexOf(Math.max(...output))),
+	};
 }
