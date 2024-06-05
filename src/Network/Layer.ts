@@ -4,6 +4,7 @@ import { Neuron } from './Neuron';
 export class Layer {
 	public Neurons: Neuron[] = [];
 	public isInputLayer: boolean;
+	public CONFIG: (number | boolean | undefined)[];
 
 	constructor(
 		layerSize: number,
@@ -11,6 +12,7 @@ export class Layer {
 		prevLayerSize?: number,
 		isInputLayer?: boolean
 	) {
+		this.CONFIG = [layerSize, nextLayerSize, prevLayerSize, isInputLayer];
 		this.isInputLayer = isInputLayer || false;
 		if (isInputLayer || !prevLayerSize) {
 			for (let i = 0; i < layerSize; i++) {
@@ -36,5 +38,23 @@ export class Layer {
 			z.push(neuron.getNeuronOutput(inputs, activationFunction));
 		}
 		return z;
+	}
+
+	public toJSON() {
+		return {
+			Neurons: this.Neurons,
+			CONFIG: this.CONFIG,
+		};
+	}
+
+	public static fromJSON(data: any): Layer {
+		const layer = new Layer(
+			data.CONFIG[0],
+			data.CONFIG[1],
+			data.CONFIG[2],
+			data.CONFIG[3]
+		);
+		layer.Neurons = data.Neurons.map((n: any) => Neuron.fromJSON(n));
+		return layer;
 	}
 }

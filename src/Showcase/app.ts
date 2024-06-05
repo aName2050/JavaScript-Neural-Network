@@ -14,13 +14,13 @@ let network: NeuralNetwork = nn;
 
 const trainScript: string = './src/Network/train.ts';
 const worker = new Worker(trainScript, {
-	workerData: JSON.stringify(nn),
+	workerData: nn,
 	execArgv: ['-r', 'ts-node/register'],
 });
 
-worker.on('message', (data: [string, string]) => {
+worker.on('message', (data: [string, any]) => {
 	if (data[0] === 'finishedTraining') {
-		network = JSON.parse(data[1]);
+		network = NeuralNetwork.fromJSON(data[1]);
 		nn.STATE = 'READY_FOR_PREDICTING';
 	}
 });
@@ -63,8 +63,10 @@ app.post('/api/v2/nn/train', (_req, res, _next) => {
 			status: nn.STATE.toString(),
 		});
 	}
+	nn.STATE = 'TRAINING';
 	res.status(200).json({
 		message: 'Training has started...',
 		status: nn.STATE.toString(),
 	});
+	nn.STATE = 'READY_FOR_PREDICTING';
 });

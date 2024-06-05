@@ -1,6 +1,7 @@
 import { ActivationFunction } from '../Util/activation';
 import { NetworkMath } from '../Util/networkMath';
 import { Layer } from './Layer';
+import { Neuron } from './Neuron';
 
 type NetworkState =
 	| 'NOT_READY'
@@ -9,11 +10,24 @@ type NetworkState =
 	| 'READY_FOR_PREDICTING'
 	| 'PREDICTING';
 
+interface NetworkConfig {
+	Layers: {
+		Neurons: Neuron[];
+		CONFIG: (number | boolean | undefined)[];
+	}[];
+	STATE: NetworkState;
+	TRAINED: boolean;
+	CONFIG: (number | number[])[];
+	activation: ActivationFunction;
+}
+
 export class NeuralNetwork {
 	public Layers: Layer[] = [];
 	private activation: ActivationFunction;
 	public STATE: NetworkState = 'NOT_READY';
 	public TRAINED: boolean = false;
+
+	public CONFIG: (number | number[])[];
 
 	constructor(
 		inputLayerSize: number,
@@ -21,6 +35,7 @@ export class NeuralNetwork {
 		outputLayerSize: number,
 		activationFunction: ActivationFunction
 	) {
+		this.CONFIG = [inputLayerSize, [...hiddenLayerConfig], outputLayerSize];
 		this.STATE = 'READY_FOR_TRAINING';
 		this.activation = activationFunction;
 		// input layer
@@ -56,6 +71,30 @@ export class NeuralNetwork {
 				false
 			)
 		);
+	}
+
+	public toJSON(): NetworkConfig {
+		return {
+			Layers: this.Layers.map(l => l.toJSON()),
+			STATE: this.STATE,
+			TRAINED: this.TRAINED,
+			CONFIG: this.CONFIG,
+			activation: this.activation,
+		};
+	}
+
+	public static fromJSON(data: NetworkConfig): NeuralNetwork {
+		const nn = new NeuralNetwork(
+			(data.CONFIG as number[])[0],
+			(data.CONFIG as number[][])[1],
+			(data.CONFIG as number[])[2],
+			data.activation as ActivationFunction
+		);
+		nn.Layers = data.Layers.map((l: any) => Layer.fromJSON(l));
+		nn.STATE = data.STATE;
+		nn.TRAINED = data.TRAINED;
+		nn.activation = data.activation as ActivationFunction;
+		return nn;
 	}
 
 	/**

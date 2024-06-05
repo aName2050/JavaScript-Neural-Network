@@ -4,7 +4,7 @@ import { Worker, workerData, parentPort } from 'node:worker_threads';
 
 import { learnCycles, learnRate } from '../../Config/config.json';
 
-const nn = JSON.parse(workerData);
+const nn = NeuralNetwork.fromJSON(workerData);
 
 // fixme: i dont know why this doesnt work, and i dont know how to fix it.
 
@@ -32,6 +32,6 @@ const trainNetwork = (network: NeuralNetwork) => {
 parentPort?.on('message', (message: string) => {
 	if (message === 'beginTraining') {
 		trainNetwork(nn);
-		parentPort?.postMessage('finishedTraining');
+		parentPort?.postMessage(['finishedTraining', nn]);
 	}
 });
