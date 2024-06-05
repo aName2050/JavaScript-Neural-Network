@@ -100,7 +100,7 @@ document.getElementById('predict').addEventListener('click', async () => {
 		body: JSON.stringify({ input }),
 	});
 
-	const result = JSON.parse(await response.json());
+	const result = JSON.parse(await response.json()).output;
 
 	document.getElementById(
 		'result'
