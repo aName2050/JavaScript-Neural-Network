@@ -19,11 +19,12 @@ const trainNetwork = (network: NeuralNetwork) => {
 	// train
 	for (let i = 0; i < learnCycles; i++) {
 		for (let j = 0; j < dataset.data.length; j++) {
-			network.train(
+			const cost = network.train(
 				dataset.data[j].input,
 				dataset.data[j].output,
 				learnRate
 			);
+			parentPort?.postMessage(['log', ['cost:', cost]]);
 		}
 	}
 	console.log(`Training finished in ${Date.now() - trainStart}ms`);

@@ -24,6 +24,9 @@ worker.on('message', (data: [string, any]) => {
 		nn.STATE = 'READY_FOR_PREDICTING';
 	}
 });
+worker.on('message', (data: [string, any[]]) => {
+	if (data[0] == 'log') console.log(...data[1]);
+});
 
 // application/json
 app.use(bodyParser.json());
@@ -68,5 +71,4 @@ app.post('/api/v2/nn/train', (_req, res, _next) => {
 		message: 'Training has started...',
 		status: nn.STATE.toString(),
 	});
-	nn.STATE = 'READY_FOR_PREDICTING';
 });
