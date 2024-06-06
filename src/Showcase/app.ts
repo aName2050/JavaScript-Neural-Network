@@ -13,8 +13,9 @@ export const PORT: number = SERVER.PORT;
 let network: NeuralNetwork = nn;
 
 const trainScript: string = './src/Network/train.ts';
+process.env.NODE_OPTIONS = '--max-old-space-size=4096';
 const worker = new Worker(trainScript, {
-	workerData: nn,
+	workerData: nn.toJSON(),
 	execArgv: ['-r', 'ts-node/register'],
 });
 
@@ -22,10 +23,7 @@ worker.on('message', (data: [string, any]) => {
 	if (data[0] === 'finishedTraining') {
 		network = NeuralNetwork.fromJSON(data[1]);
 		nn.STATE = 'READY_FOR_PREDICTING';
-	}
-});
-worker.on('message', (data: [string, any[]]) => {
-	if (data[0] == 'log') console.log(...data[1]);
+	} else if (data[0] == 'log') console.log(...data[1]);
 });
 
 // application/json

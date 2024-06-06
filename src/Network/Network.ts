@@ -124,6 +124,14 @@ export class NeuralNetwork {
 		return networkOutput;
 	}
 
+	/**
+	 * Trains the neural network with the given inputs and dataset.
+	 *
+	 * @param {number[]} networkInputs - The input values for the network.
+	 * @param {number[]} dataset - The expected output values for the network.
+	 * @param {number} learnRate - The learning rate for the network.
+	 * @return {number} The cost of the network after training.
+	 */
 	public train(
 		networkInputs: number[],
 		dataset: number[],
@@ -173,17 +181,17 @@ export class NeuralNetwork {
 							layerOut[weight]
 						);
 
-					// console.log(
-					// 	`TRAINING... layer:${layer + 1}/${
-					// 		this.Layers.length
-					// 	} neuron:${neuron + 1}/${
-					// 		this.Layers[layer].Neurons.length
-					// 	} weight:${weight + 1}/${
-					// 		this.Layers[layer].Neurons[neuron].weights.length
-					// 	} oldWeight: ${oldWeight} newWeight: ${
-					// 		this.Layers[layer].Neurons[neuron].weights[weight]
-					// 	}`
-					// );
+					console.log(
+						`TRAINING... layer:${layer + 1}/${
+							this.Layers.length
+						} neuron:${neuron + 1}/${
+							this.Layers[layer].Neurons.length
+						} weight:${weight + 1}/${
+							this.Layers[layer].Neurons[neuron].weights.length
+						} oldWeight: ${oldWeight} newWeight: ${
+							this.Layers[layer].Neurons[neuron].weights[weight]
+						}`
+					);
 				}
 
 				const oldBias = this.Layers[layer].Neurons[neuron].bias;
@@ -195,15 +203,15 @@ export class NeuralNetwork {
 						dataset,
 						Z
 					);
-				// console.log(
-				// 	`TRAINING... layer:${layer + 1}/${
-				// 		this.Layers.length
-				// 	} neuron:${neuron + 1}/${
-				// 		this.Layers[layer].Neurons.length
-				// 	} oldBias: ${oldBias} newBias: ${
-				// 		this.Layers[layer].Neurons[neuron].bias
-				// 	}`
-				// );
+				console.log(
+					`TRAINING... layer:${layer + 1}/${
+						this.Layers.length
+					} neuron:${neuron + 1}/${
+						this.Layers[layer].Neurons.length
+					} oldBias: ${oldBias} newBias: ${
+						this.Layers[layer].Neurons[neuron].bias
+					}`
+				);
 			}
 
 			layerOut = currLayerOut;
